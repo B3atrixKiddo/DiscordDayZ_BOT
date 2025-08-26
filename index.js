@@ -91,15 +91,6 @@ function startBE() { // main function to start & manage BattlEye RCon connection
 
         console.log(msg); // log all messages to console
 
-        // detect player count message and update Discord voice channel with current in game players count
-        if (msg.includes("[#] [IP Address]:[Port] [Ping] [GUID] [Name]")) {
-            const total = parseTotalPlayers(msg);
-            if (total != null) {
-                await updatePlayerCount(total);
-                return;
-            }
-        }
-
         // detect RCon and GUID messages and send them to server events Discord channel
         if (msg.includes("RCon") || msg.includes("GUID")) {
             if (!msg.includes("Welcome") && eventsChannel) {
@@ -146,6 +137,15 @@ function startBE() { // main function to start & manage BattlEye RCon connection
             } return;
         }
 
+        // detect player count message and update Discord voice channel with current in game players count
+        if (msg.includes("[#] [IP Address]:[Port] [Ping] [GUID] [Name]")) {
+            const total = parseTotalPlayers(msg);
+            if (total != null) {
+                await updatePlayerCount(total);
+                return;
+            }
+        }
+
     });
 
     try {
@@ -174,7 +174,7 @@ async function updatePlayerCount(n) { // update player count voice channel name 
                     {
                         type: ActivityType.Custom,         // ActivityType options: Playing, Streaming, Listening, Watching, Competing, Custom
                         name: "custom",                   // the custom activity name (not shown on Discord)
-                        state: `🪖 Players Online: ${n}`,// <- the text shown
+                        state: `🪖 In-game Survivors: ${n}`,// <- the text shown you can change it to what ever, but keep in mind that n is the amount
                     },
                 ],
                 status: "online", // You can show online, idle, and dnd (do not disturb)
