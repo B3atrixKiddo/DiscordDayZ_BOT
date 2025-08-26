@@ -1,0 +1,11 @@
+{
+  "name": "dayz-discord-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "battleye-node": "^0.9.7",
+    "discord.js": "^14.15.3",
+    "dotenv": "^17.2.1"
+  }
+}
