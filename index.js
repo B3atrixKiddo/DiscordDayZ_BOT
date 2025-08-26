@@ -91,6 +91,15 @@ function startBE() { // main function to start & manage BattlEye RCon connection
 
         console.log(msg); // log all messages to console
 
+        // detect player count message and update Discord voice channel with current in game players count
+        if (msg.includes("[IP Address]:[Port] [Ping] [GUID] [Name]")) {
+            const total = parseTotalPlayers(msg);
+            if (total != null) {
+                await updatePlayerCount(total);
+                return;
+            }
+        }
+
         // detect RCon and GUID messages and send them to server events Discord channel
         if (msg.includes("RCon") || msg.includes("GUID")) {
             if (!msg.includes("Welcome") && eventsChannel) {
@@ -135,15 +144,6 @@ function startBE() { // main function to start & manage BattlEye RCon connection
             } else {
                 await chatChannel.send(`\`\`\`fix\n(${type}) ${name}: ${text}\n\`\`\``);
             } return;
-        }
-
-        // detect player count message and update Discord voice channel with current in game players count
-        if (msg.includes("[#] [IP Address]:[Port] [Ping] [GUID] [Name]")) {
-            const total = parseTotalPlayers(msg);
-            if (total != null) {
-                await updatePlayerCount(total);
-                return;
-            }
         }
 
     });
