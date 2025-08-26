@@ -1,5 +1,5 @@
-# DayZ Discord Bot - integration with your server & channel
-This script will connect your existing Discord bot with your RCon BattlEye connection to your DayZ server
+# DayZ Discord Bot - integrate game server data to discord server
+This script will connect your existing Discord bot with your RCon BattlEye connection to your DayZ server and send game data to your discord server channels
 
 ## **Available Intergrations**
 **• Display Global & Direct in-game chat to certain discord channel**
