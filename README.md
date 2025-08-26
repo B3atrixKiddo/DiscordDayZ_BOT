@@ -2,13 +2,14 @@
 This script will connect your existing Discord bot with your RCon BattlEye connection to your DayZ server
 
 ## **Available Intergrations**
-**• Display player connect & disconnect info to certain discord channel**
-
-**• Display RCon logs to certain discord channel**
-
 **• Display Global & Direct in-game chat to certain discord channel**
 
+**• Display player connect & disconnect info to certain discord channel**
+
 **• Display current in-game online players to certain discord voice channel & in bot activity**
+
+**• Display RCON logs to certain discord channel**
+
 
 # Installation
 Either download zip this repository or git clone it into an empty folder.
