@@ -8,6 +8,7 @@ dotenv.config(); // load .env file
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const BE_PASS = process.env.BE_PASS;
 const CHAT_CHANNEL_ID = process.env.CHAT_CHANNEL_ID;
+const CHAT_GLOBAL_CHANNEL_ID = process.env.CHAT_GLOBAL_CHANNEL_ID;
 const SERVER_EVENTS_CHANNEL_ID = process.env.SERVER_EVENTS_CHANNEL_ID;
 const SERVER_EVENTS_LOG_CHANNEL_ID = process.env.SERVER_EVENTS_LOG_CHANNEL_ID;
 const PLAYER_COUNT_CHANNEL_ID = process.env.PLAYER_COUNT_CHANNEL_ID;
@@ -21,7 +22,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 
 // ---------- Discord Channel Variables ----------
-let chatChannel, eventsChannel, logChannel, playerCountChannel;
+let chatChannel, globalChannel, eventsChannel, logChannel, playerCountChannel;
 
 
 // ---------- BattlEye RCon Variable ----------
@@ -50,12 +51,14 @@ client.once("ready", async () => { // when Discord bot is ready
     console.log(`✅ Logged in as ${client.user.tag}`); // log bot login to console
 
     chatChannel = await client.channels.fetch(CHAT_CHANNEL_ID).catch(() => null);                // global & direct chat channel
+    globalChannel = await client.channels.fetch(CHAT_GLOBAL_CHANNEL_ID).catch(() => null);       // global chat channel
     eventsChannel = await client.channels.fetch(SERVER_EVENTS_CHANNEL_ID).catch(() => null);     // server events channel
     logChannel = await client.channels.fetch(SERVER_EVENTS_LOG_CHANNEL_ID).catch(() => null);    // players connected/disconnected log channel
     playerCountChannel = await client.channels.fetch(PLAYER_COUNT_CHANNEL_ID).catch(() => null); // player count channel
 
     // verify channels exist
     if (!chatChannel) console.log("⚠️  Missing access to CHAT_CHANNEL_ID");
+    if (!globalChannel) console.log("⚠️  Missing access to CHAT_GLOBAL_CHANNEL_ID");
     if (!eventsChannel) console.log("⚠️  Missing access to SERVER_EVENTS_CHANNEL_ID");
     if (!logChannel) console.log("⚠️  Missing access to SERVER_EVENTS_LOG_CHANNEL_ID");
     if (!playerCountChannel) console.log("⚠️  Missing access to PLAYER_COUNT_CHANNEL_ID");
@@ -102,7 +105,7 @@ function startBE() { // main function to start & manage BattlEye RCon connection
 
         // detect RCon and GUID messages and send them to server events Discord channel
         if (msg.includes("RCon") || msg.includes("GUID")) {
-            if (!msg.includes("Welcome") && eventsChannel) {
+            if (!msg.includes("Welcome")) {
                 await eventsChannel.send(msg);
             }
             return;
@@ -134,14 +137,16 @@ function startBE() { // main function to start & manage BattlEye RCon connection
             // parse chat message
             const chat = parseChat(msg);
 
-            if (!chat || !chatChannel) return;
+            if (!chat || !chatChannel || !globalChannel) return;
 
             const { type, name, text } = chat;
 
             // if the type really is Global, use diff + else use fix (for Direct messages)
             if (type === "Global") {
-                await chatChannel.send(`\`\`\`diff\n+ (${type}) ${name}: ${text}\n\`\`\``);
+                // await chatChannel.send(`\`\`\`fix\n(${type}) ${name}: ${text}\n\`\`\``);
+                await globalChannel.send(`\`\`\`diff\n+ (${type}) ${name}: ${text}\n\`\`\``);
             } else {
+                // display in game direct messages to discord channel
                 await chatChannel.send(`\`\`\`fix\n(${type}) ${name}: ${text}\n\`\`\``);
             } return;
         }
@@ -164,7 +169,7 @@ async function updatePlayerCount(n) { // update player count voice channel name 
         // const ch = await client.channels.fetch(PLAYER_COUNT_CHANNEL_ID).catch(() => null);
         const ch = playerCountChannel;
         if (ch && (ch.type === ChannelType.GuildVoice || ch.type === ChannelType.GuildStageVoice)) {
-            const newName = `Players: ${n}`;
+            const newName = `🪖 In-game Survivors: ${n}`;
             if (ch.name !== newName) await ch.setName(newName);
         }
         // if (client.user) await client.user.setActivity(`${n} online`, { type: ActivityType.Custom }); // old way
