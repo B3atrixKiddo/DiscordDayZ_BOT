@@ -95,11 +95,11 @@ function startBE() { // main function to start & manage BattlEye RCon connection
         console.log(msg); // log all messages to console
 
         // detect player count message and update Discord voice channel with current in game players count
-        if (msg.includes("[IP Address]:[Port] [Ping] [GUID] [Name]")) {
+   if (msg.includes("[IP Address]:[Port] [Ping] [GUID] [Name]")) {
             const total = parseTotalPlayers(msg);
             if (total != null) {
                 await updatePlayerCount(total);
-                return;
+                return await eventsChannel.send(msg); // send the players command output to server events channel
             }
         }
 
