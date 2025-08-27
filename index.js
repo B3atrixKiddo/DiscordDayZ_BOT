@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, ChannelType, ActivityType } from "discord.js";
+import { Client, GatewayIntentBits, ChannelType, ActivityType, EmbedBuilder } from "discord.js";
 import dotenv from "dotenv";
 import RCON from "battleye-node";
 
@@ -95,19 +95,27 @@ function startBE() { // main function to start & manage BattlEye RCon connection
         console.log(msg); // log all messages to console
 
         // detect player count message and update Discord voice channel with current in game players count
-   if (msg.includes("[IP Address]:[Port] [Ping] [GUID] [Name]")) {
+        if (msg.includes("[IP Address]:[Port] [Ping] [GUID] [Name]")) {
             const total = parseTotalPlayers(msg);
             if (total != null) {
                 await updatePlayerCount(total);
-                return await eventsChannel.send(msg); // send the players command output to server events channel
+                // return await eventsChannel.send(msg); // send the players command output to server events channel
             }
         }
 
         // detect RCon and GUID messages and send them to server events Discord channel
         if (msg.includes("RCon") || msg.includes("GUID")) {
             if (!msg.includes("Welcome")) {
-                await eventsChannel.send(msg);
+                // await eventsChannel.send(msg);
+                const rulesEmbed = new EmbedBuilder()
+                    .setColor("#ff9900")
+                    .setTitle("💻 Server Event")
+                    .setDescription(
+                        `${msg}`)
+
+                await eventsChannel.send({ embeds: [rulesEmbed] });
             }
+
             return;
         }
 
@@ -120,13 +128,29 @@ function startBE() { // main function to start & manage BattlEye RCon connection
             // display disconnected player to Discord channel
             if (logChannel && msg.includes(" disconnected")) {
                 //  be.commandSend?.("players"); // can uncomment this line if you want to query current player count to update on disconnect too
-                await logChannel.send(`\`\`\`diff\n- ${msg}\n\`\`\``);
+                const rulesEmbed = new EmbedBuilder()
+                    .setColor("#ff0000")
+                    .setTitle("🔌 Disconnected Player")
+
+                    .setDescription(
+                        `\`\`\`diff\n- ${msg}\n\`\`\``)
+
+                await logChannel.send({ embeds: [rulesEmbed] });
+                // await logChannel.send(`\`\`\`diff\n- ${msg}\n\`\`\``);
             }
 
             // display connected player to Discord channel + query current player count
             else if (logChannel && msg.includes(" connected")) {
                 be.commandSend?.("players"); // triggers player count command
-                await logChannel.send(`\`\`\`diff\n+ ${msg}\n\`\`\``);
+                const rulesEmbed = new EmbedBuilder()
+                    .setColor("#2bff00")
+                    .setTitle("🪖 Player Connected")
+
+                    .setDescription(
+                        `\`\`\`diff\n+ ${msg}\n\`\`\``)
+
+                await logChannel.send({ embeds: [rulesEmbed] });
+                // await logChannel.send(`\`\`\`diff\n+ ${msg}\n\`\`\``);
             }
             return;
         }
