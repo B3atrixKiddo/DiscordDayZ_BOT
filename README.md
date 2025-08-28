@@ -49,11 +49,6 @@ You can also find a free Discord bot hosting service which is a better option to
 
 <img width="517" height="228" alt="chat" src="https://github.com/user-attachments/assets/6f7b8ca4-e0da-4d62-b31b-4f79b8d259bd" />
 
-*optinal*: **send only global chat server messages to discord channel**
-
-add comment // to the direct messages part(where fixx is located)
-<img width="790" height="159" alt="image" src="https://github.com/user-attachments/assets/3bbcc2d8-0ca7-402d-98f3-50745001b5e7" />
-you can also send the direct message into a diffrent discord channel, for example private mod channel to see direct messages between players
 <br>
 <br>
 
