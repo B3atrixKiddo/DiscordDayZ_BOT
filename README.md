@@ -45,36 +45,36 @@ You can also find a free Discord bot hosting service which is a better option to
 <br>
 
 ## **Available Intergrations**
-## **• Display Global & Direct in-game chat to certain discord channel**
+## **• Display Global in-game chat to certain discord channel**
 
-<img width="517" height="228" alt="chat" src="https://github.com/user-attachments/assets/6f7b8ca4-e0da-4d62-b31b-4f79b8d259bd" />
+<img width="511" height="170" alt="Screenshot 2025-08-27 182902" src="https://github.com/user-attachments/assets/174059cb-64a7-41a8-8017-e51cf522616b" />
 
-*optinal*: **send only global chat server messages to discord channel**
+<br>
+<br>
 
-add comment // to the direct messages part(where fixx is located)
-<img width="790" height="159" alt="image" src="https://github.com/user-attachments/assets/3bbcc2d8-0ca7-402d-98f3-50745001b5e7" />
-you can also send the direct message into a diffrent discord channel, for example private mod channel to see direct messages between players
+## **• Display Direct in-game chat to certain discord channel**
+
+<img width="518" height="317" alt="Screenshot 2025-08-27 182651" src="https://github.com/user-attachments/assets/00a7dba8-61d8-4245-86b5-ad3b7c067ae0" />
+
 <br>
 <br>
 
 ## **• Display player connect & disconnect info to certain discord channel**
 
-<img width="496" height="145" alt="cdis" src="https://github.com/user-attachments/assets/421fed66-687a-4e0e-beca-302c43af9090" />
+<img width="555" height="321" alt="asdawdawda" src="https://github.com/user-attachments/assets/9cd8309b-d8c5-4bf7-9b45-a7395aa4ff9e" />
 
 <br>
 <br>
 
 ## **• Display current in-game online players to certain discord voice channel & in bot activity**
 
-<img width="283" height="196" alt="image" src="https://github.com/user-attachments/assets/7bad089c-c8d9-41b6-b524-4925a95c4c51" />
+<img width="243" height="83" alt="Screenshot 2025-08-27 182559" src="https://github.com/user-attachments/assets/90c5dacf-7370-47b6-acee-a3109e1d4800" />
 
-<img width="243" height="79" alt="image" src="https://github.com/user-attachments/assets/e9861851-bdf5-4ec6-b4de-18a579d67bbb" />
+<img width="244" height="38" alt="Screenshot 2025-08-27 182701" src="https://github.com/user-attachments/assets/62f5345c-8fe5-41a5-8b4a-be0e89575a32" />
 
 <br>
 <br>
 
 ## **• Display RCON logs to certain discord channel**
 
-<img width="556" height="353" alt="rconlog" src="https://github.com/user-attachments/assets/0b5b731d-3300-4760-9c34-024ca5cd95eb" />
-
-
+<img width="557" height="430" alt="rconnew" src="https://github.com/user-attachments/assets/888d2807-fc53-4983-9a8d-e8642f43374e" />
