@@ -44,7 +44,7 @@ You can also find a free Discord bot hosting service which is a better option to
 <br>
 <br>
 
-## **Available Intergrations**
+## **Available Integrations**
 ## **• Display Global in-game chat to certain discord channel**
 
 <img width="511" height="170" alt="Screenshot 2025-08-27 182902" src="https://github.com/user-attachments/assets/174059cb-64a7-41a8-8017-e51cf522616b" />
