@@ -13,7 +13,7 @@ const SERVER_RCON_EVENTS_CHANNEL_ID = process.env.SERVER_RCON_EVENTS_CHANNEL_ID;
 const PLAYER_CONNECT_CHANNEL_ID = process.env.PLAYER_CONNECT_CHANNEL_ID;
 const PLAYER_COUNT_CHANNEL_ID = process.env.PLAYER_COUNT_CHANNEL_ID;
 const BE_IP = process.env.BE_IP;
-const BE_PORT = Number(process.env.BE_PORT || 2408);
+const BE_PORT = Number(process.env.BE_PORT || 2308);
 
 
 
