@@ -7,10 +7,10 @@ dotenv.config(); // load .env file
 // ---------- Config ----------
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const BE_PASS = process.env.BE_PASS;
-const CHAT_CHANNEL_ID = process.env.CHAT_CHANNEL_ID;
+const CHAT_DIRECT_CHANNEL_ID = process.env.CHAT_DIRECT_CHANNEL_ID;
 const CHAT_GLOBAL_CHANNEL_ID = process.env.CHAT_GLOBAL_CHANNEL_ID;
-const SERVER_EVENTS_CHANNEL_ID = process.env.SERVER_EVENTS_CHANNEL_ID;
-const SERVER_EVENTS_LOG_CHANNEL_ID = process.env.SERVER_EVENTS_LOG_CHANNEL_ID;
+const SERVER_RCON_EVENTS_CHANNEL_ID = process.env.SERVER_RCON_EVENTS_CHANNEL_ID;
+const PLAYER_CONNECT_CHANNEL_ID = process.env.PLAYER_CONNECT_CHANNEL_ID;
 const PLAYER_COUNT_CHANNEL_ID = process.env.PLAYER_COUNT_CHANNEL_ID;
 const BE_IP = process.env.BE_IP;
 const BE_PORT = Number(process.env.BE_PORT || 2408);
@@ -22,7 +22,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 
 // ---------- Discord Channel Variables ----------
-let chatChannel, globalChannel, eventsChannel, logChannel, playerCountChannel;
+let directChatChannel, globalChatChannel, rconEventsChannel, playerConnectChannel, playerCountChannel;
 
 
 // ---------- BattlEye RCon Variable ----------
@@ -50,17 +50,17 @@ client.once("ready", async () => { // when Discord bot is ready
 
     console.log(`✅ Logged in as ${client.user.tag}`); // log bot login to console
 
-    chatChannel = await client.channels.fetch(CHAT_CHANNEL_ID).catch(() => null);                // global & direct chat channel
-    globalChannel = await client.channels.fetch(CHAT_GLOBAL_CHANNEL_ID).catch(() => null);       // global chat channel
-    eventsChannel = await client.channels.fetch(SERVER_EVENTS_CHANNEL_ID).catch(() => null);     // server events channel
-    logChannel = await client.channels.fetch(SERVER_EVENTS_LOG_CHANNEL_ID).catch(() => null);    // players connected/disconnected log channel
+    directChatChannel = await client.channels.fetch(CHAT_DIRECT_CHANNEL_ID).catch(() => null);                // global & direct chat channel
+    globalChatChannel = await client.channels.fetch(CHAT_GLOBAL_CHANNEL_ID).catch(() => null);       // global chat channel
+    rconEventsChannel = await client.channels.fetch(SERVER_RCON_EVENTS_CHANNEL_ID).catch(() => null);     // server events channel
+    playerConnectChannel = await client.channels.fetch(PLAYER_CONNECT_CHANNEL_ID).catch(() => null);    // players connected/disconnected log channel
     playerCountChannel = await client.channels.fetch(PLAYER_COUNT_CHANNEL_ID).catch(() => null); // player count channel
 
     // verify channels exist
-    if (!chatChannel) console.log("⚠️  Missing access to CHAT_CHANNEL_ID");
-    if (!globalChannel) console.log("⚠️  Missing access to CHAT_GLOBAL_CHANNEL_ID");
-    if (!eventsChannel) console.log("⚠️  Missing access to SERVER_EVENTS_CHANNEL_ID");
-    if (!logChannel) console.log("⚠️  Missing access to SERVER_EVENTS_LOG_CHANNEL_ID");
+    if (!directChatChannel) console.log("⚠️  Missing access to CHAT_CHANNEL_ID");
+    if (!globalChatChannel) console.log("⚠️  Missing access to CHAT_GLOBAL_CHANNEL_ID");
+    if (!rconEventsChannel) console.log("⚠️  Missing access to SERVER_RCON_EVENTS_CHANNEL_ID");
+    if (!playerConnectChannel) console.log("⚠️  Missing access to PLAYER_CONNECT_CHANNEL_ID");
     if (!playerCountChannel) console.log("⚠️  Missing access to PLAYER_COUNT_CHANNEL_ID");
 
     startBE(); // connect BattlEye RCon
@@ -99,21 +99,21 @@ function startBE() { // main function to start & manage BattlEye RCon connection
             const total = parseTotalPlayers(msg);
             if (total != null) {
                 await updatePlayerCount(total);
-                // return await eventsChannel.send(msg); // send the players command output to server events channel
+                // return await rconEventsChannel.send(msg); // send the players command output to server events channel
             }
         }
 
         // detect RCon and GUID messages and send them to server events Discord channel
         if (msg.includes("RCon") || msg.includes("GUID")) {
             if (!msg.includes("Welcome")) {
-                // await eventsChannel.send(msg);
+                // await rconEventsChannel.send(msg);
                 const rulesEmbed = new EmbedBuilder()
                     .setColor("#ff9900")
                     .setTitle("💻 Server Event")
                     .setDescription(
                         `${msg}`)
 
-                await eventsChannel.send({ embeds: [rulesEmbed] });
+                await rconEventsChannel.send({ embeds: [rulesEmbed] });
             }
 
             return;
@@ -126,7 +126,7 @@ function startBE() { // main function to start & manage BattlEye RCon connection
             if (msg.includes("Welcome")) return;
 
             // display disconnected player to Discord channel
-            if (logChannel && msg.includes(" disconnected")) {
+            if (playerConnectChannel && msg.includes(" disconnected")) {
                 //  be.commandSend?.("players"); // can uncomment this line if you want to query current player count to update on disconnect too
                 const rulesEmbed = new EmbedBuilder()
                     .setColor("#ff0000")
@@ -135,12 +135,12 @@ function startBE() { // main function to start & manage BattlEye RCon connection
                     .setDescription(
                         `\`\`\`diff\n- ${msg}\n\`\`\``)
 
-                await logChannel.send({ embeds: [rulesEmbed] });
-                // await logChannel.send(`\`\`\`diff\n- ${msg}\n\`\`\``);
+                await playerConnectChannel.send({ embeds: [rulesEmbed] });
+                // await playerConnectChannel.send(`\`\`\`diff\n- ${msg}\n\`\`\``);
             }
 
             // display connected player to Discord channel + query current player count
-            else if (logChannel && msg.includes(" connected")) {
+            else if (playerConnectChannel && msg.includes(" connected")) {
                 be.commandSend?.("players"); // triggers player count command
                 const rulesEmbed = new EmbedBuilder()
                     .setColor("#2bff00")
@@ -149,8 +149,8 @@ function startBE() { // main function to start & manage BattlEye RCon connection
                     .setDescription(
                         `\`\`\`diff\n+ ${msg}\n\`\`\``)
 
-                await logChannel.send({ embeds: [rulesEmbed] });
-                // await logChannel.send(`\`\`\`diff\n+ ${msg}\n\`\`\``);
+                await playerConnectChannel.send({ embeds: [rulesEmbed] });
+                // await playerConnectChannel.send(`\`\`\`diff\n+ ${msg}\n\`\`\``);
             }
             return;
         }
@@ -161,17 +161,17 @@ function startBE() { // main function to start & manage BattlEye RCon connection
             // parse chat message
             const chat = parseChat(msg);
 
-            if (!chat || !chatChannel || !globalChannel) return;
+            if (!chat || !directChatChannel || !globalChatChannel) return;
 
             const { type, name, text } = chat;
 
             // if the type really is Global, use diff + else use fix (for Direct messages)
             if (type === "Global") {
-                // await chatChannel.send(`\`\`\`fix\n(${type}) ${name}: ${text}\n\`\`\``);
-                await globalChannel.send(`\`\`\`diff\n+ (${type}) ${name}: ${text}\n\`\`\``);
+                // await directChatChannel.send(`\`\`\`fix\n(${type}) ${name}: ${text}\n\`\`\``);
+                await globalChatChannel.send(`\`\`\`diff\n+ (${type}) ${name}: ${text}\n\`\`\``);
             } else {
                 // display in game direct messages to discord channel
-                await chatChannel.send(`\`\`\`fix\n(${type}) ${name}: ${text}\n\`\`\``);
+                await directChatChannel.send(`\`\`\`fix\n(${type}) ${name}: ${text}\n\`\`\``);
             } return;
         }
 
