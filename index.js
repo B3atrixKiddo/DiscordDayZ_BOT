@@ -6,14 +6,15 @@ dotenv.config(); // load .env file
 
 // ---------- Config ----------
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-const BE_PASS = process.env.BE_PASS;
 const CHAT_DIRECT_CHANNEL_ID = process.env.CHAT_DIRECT_CHANNEL_ID;
 const CHAT_GLOBAL_CHANNEL_ID = process.env.CHAT_GLOBAL_CHANNEL_ID;
-const SERVER_RCON_EVENTS_CHANNEL_ID = process.env.SERVER_RCON_EVENTS_CHANNEL_ID;
 const PLAYER_CONNECT_CHANNEL_ID = process.env.PLAYER_CONNECT_CHANNEL_ID;
 const PLAYER_COUNT_CHANNEL_ID = process.env.PLAYER_COUNT_CHANNEL_ID;
+const SERVER_RCON_EVENTS_CHANNEL_ID = process.env.SERVER_RCON_EVENTS_CHANNEL_ID;
+
 const BE_IP = process.env.BE_IP;
 const BE_PORT = Number(process.env.BE_PORT || 2308);
+const BE_PASS = process.env.BE_PASS;
 
 
 
